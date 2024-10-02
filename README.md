@@ -8,17 +8,22 @@ This tool converts a Ghost blog export to a format compatible with Next.js blogs
 - Downloads and processes images, saving them to ./public/static/images/<post-slug>/
 - Generates frontmatter compatible with the [Tailwind Nextjs Starter Blog](https://github.com/timlrx/tailwind-nextjs-starter-blog)
 - Uses either Claude AI or ChatGPT for intelligent content processing and formatting
-  - For Claude AI, it uses the Messages API. It sends the XML instructions as the first message, and then each post as a subsequent message in the same conversation.
-  - For ChatGPT, it uses the Assistant API. It creates a new assistant with the XML instructions, and then processes each post in a separate thread.
 - Handles code block language detection
 - Converts image tags to Next.js Image components
 - Automatically detects and includes image dimensions for Next.js Image components
+- Configurable AI Instructions in XML format, which you can tailor to your needs.
 - Generates canonical URLs for each post
 - Supports customizable image extensions for processing
 - Implements rate limiting for API calls to AI services and backs off if the limits are hit
 - Provides options for handling missing post images (remove from post or replace with a placeholder)
 - Skips already processed posts to avoid duplicate work
 - Optionally renames downloaded images based on alt text
+
+## AI Notes
+
+  - For Claude AI, it uses the Messages API. It sends the XML instructions as the first message, and then each post as a subsequent message in the same conversation.
+  - For ChatGPT, it uses the Assistant API. It creates a new assistant with the XML instructions, and then processes each post in a separate thread.
+  - In my testing, I found that Claude performed better and was more reliable. ChatGPT didn't always follow the instructions and would not detect image gallaries nearly as reliably, inserting them where they shouldn't be. Feel free to tweak the ai_instructions.xml file to better fit your own blog's needs.
 
 ## Prerequisites
 
