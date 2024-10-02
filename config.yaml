@@ -1,0 +1,62 @@
+# Ghost to Next.js Blog Converter Configuration
+
+# Input configuration
+input:
+  # Type of input (currently only supports 'ghost')
+  type: ghost
+  # Path to the Ghost export JSON file
+  path: ./ghost-export.json
+
+# Output configuration
+output:
+  # Directory where converted MDX files will be saved
+  directory: "./data/blog"
+
+# Ghost-specific configuration
+ghost:
+  # Base URL of the original Ghost blog
+  url: "https://www.yourdomain.com"
+  # Whether to include '/blog/' prefix in canonical URLs
+  include_blog_prefix: false
+
+# Image handling configuration
+images:
+  # Directory where downloaded images will be saved
+  output_directory: "./public/static/images"
+  # List of image file extensions to process
+  extensions:
+    - ".jpg"
+    - ".jpeg"
+    - ".png"
+    - ".gif"
+    - ".svg"
+  remove_failed: true  # Whether to remove failed image downloads from content
+  placeholder: ">The image that was here has been lost to the sands of time"
+  rename_downloaded: true  # Whether to rename downloaded images to match the alt text set by Claude
+
+# AI service configuration
+ai_service:
+  provider: "chatgpt"  # Options: "claude" or "chatgpt"
+  claude:
+    api_key: "your_claude_api_key_here"
+    model: "claude-3-5-sonnet-20240620"
+    max_tokens: 5000
+    max_retries: 3
+    initial_retry_delay: 2000  # in milliseconds
+  chatgpt:
+    api_key: "your_chatgpt_api_key_here"
+    model: "gpt-4o"
+    max_retries: 3
+    initial_retry_delay: 1000  # in milliseconds
+
+# Conversion process configuration
+process:
+  posts_to_process: 0  # Set to 0 to process all posts, or specify a number to limit the posts processed
+  rate_limit_delay: 5000
+
+# Logging configuration
+logging:
+  # Logging level (e.g., 'info', 'warn', 'error')
+  level: info
+  # Path to the log file
+  file: conversion.log

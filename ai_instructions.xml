@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ai-instructions>
+  <language>en-gb</language>
+  <general>
+    <instruction>Convert the given blog post content to MDX format compatible with the Tailwind Nextjs Starter Blog.</instruction>
+    <instruction>Ensure the output is valid MDX syntax and includes only necessary imports.</instruction>
+    <instruction>Preserve the original content's meaning and structure while optimizing for MDX format.</instruction>
+    <instruction>Respond with only the MDX content, without any additional explanations or text.</instruction>
+    <instruction>Do not include any markdown code block syntax around the MDX content.</instruction>
+    <instruction>Do not respond with anything other than the MDX content, so nothing like "To convert this Ghost blog post to Next.js MDX format, you can use the following structure:" at the start or anything after the MDX content.</instruction>
+  </general>
+
+  <frontmatter>
+    <instruction>Generate a frontmatter section at the beginning of the MDX file with the following fields, ensuring all string values are properly quoted and escaped.</instruction>
+    <example>
+title (required)
+date (required)
+tags (optional)
+lastmod (optional)
+draft (optional)
+summary (optional)
+images (optional)
+authors (optional list. Uses `default` if none is specified)
+layout (optional list, can left out, or be any of 'AuthorLayout','ListLayout','ListLayoutWithTags','PostBanner','PostLayout','PostSimple')
+canonicalUrl (optional, canonical url for the post for SEO)
+    </example>
+    <instruction>For posts that have a feature_image set, set the layout to use 'PostLayout'.</instruction>
+    <example>
+---
+title: "Your Post Title with 'Single Quotes' Inside"
+date: '2024-01-01'
+lastmod: '2024-01-01'
+tags: ['tag1', 'tag2']
+draft: false
+summary: 'A brief summary of the post'
+images: ['/static/images/post-slug/image1.jpg']
+layout: 'PostLayout'
+---
+    </example>
+    <instruction>For all other posts, do not set the layout field.</instruction>
+    <example>
+    ---
+title: "Your Post Title with 'Single Quotes' Inside"
+date: '2024-01-01'
+lastmod: '2024-01-01'
+tags: ['tag1', 'tag2', 'tag3']
+draft: false
+summary: 'A brief summary of the post'
+images: []
+authors: ['default']
+---
+    </example>
+    <instruction>The 'title' and 'date' fields are required and must always be included and must always use the original post's title and date. If they are missing in the post leave them as empty fields.</instruction>
+    <instruction>Use the original post's title for the 'title' field, enclosed in double quotes. If the title contains double quotes, escape them with a backslash.</instruction>
+    <instruction>Use the original post's publication date for the 'date' field in 'YYYY-MM-DD' format, enclosed in single quotes.</instruction>
+    <instruction>If the original post does not have authors, do not include the 'authors' field.</instruction>
+    <instruction>If the original post has authors, use them for the 'authors' field, in the ['',''] array format.</instruction>
+    <instruction>Include the canonicalUrl field with the original post's URL.</instruction>
+    <instruction>For string values containing quotes, use double quotes to enclose the entire value and escape any internal double quotes with a backslash.</instruction>
+    <instruction>For the 'title' field, always use double quotes and escape any internal double or single quotes with a backslash.</instruction>
+    <instruction>Ensure the frontmatter is always valid and conforms to Hugo's standards.</instruction>
+    <instruction>Include 'lastmod' field with the same date as 'date' if not available.</instruction>
+    <instruction>Use the original post draft status.</instruction>
+    <instruction>Use the original post's tags, if there are none, generate one or two tags that are relevant to the post content.</instruction>
+    <instruction>Use the original post's summary, or if there isn't one, create a brief summary of the post content for the 'summary' field, ensuring it's properly quoted and escaped if necessary.</instruction>
+    <instruction>Include the 'images' field with at least an empty array such as [] if there are no images.</instruction>
+    <instruction>Use 'PostLayout' for the layout field unless explicitly instructed otherwise.</instruction>
+    <instruction>Ensure there are no trailing spaces after the closing quotes for any field.</instruction>
+  </frontmatter>
+
+  <content>
+    <instruction>The input will be a JSON string containing post metadata and content. Parse this JSON to extract the necessary information for creating the MDX file.</instruction>
+    <instruction>Convert all headings to use the appropriate number of '#' symbols.</instruction>
+    <instruction>Ensure proper spacing between different elements (e.g., between headings and paragraphs).</instruction>
+    <instruction>Convert inline code to use single backticks.</instruction>
+    <instruction>Convert code blocks to use triple backticks with the appropriate language specified (listed below).</instruction>
+    <instruction>Convert links to use the [text](url) format.</instruction>
+    <instruction>Do not include any custom React components or imports unless explicitly provided in the original content.</instruction>
+    <instruction>Fix spelling mistakes in the content ensuring they meet the language specified above.</instruction>
+    <instruction>Always include a frontmatter section at the beginning of the MDX file.</instruction>
+    <instruction>Preserve complex HTML structures like figure tags, but ensure they are compatible with MDX syntax.</instruction>
+    <instruction>Convert img tags within complex structures to use the Next.js Image component.</instruction>
+    <instruction>Ensure all HTML tags are properly closed, including self-closing tags like br /.</instruction>
+    <instruction>Replace br tags with br / to make them MDX-compatible.</instruction>
+    <instruction>Verify that all opening div tags have corresponding closing /div tags.</instruction>
+    <instruction>Avoid mixing HTML tags with Markdown syntax within the same paragraph. Start a new line for HTML elements.</instruction>
+    <instruction>If HTML tags are used for formatting, consider using equivalent Markdown syntax when possible.</instruction>
+    <instruction>For complex HTML structures, wrap them in a div tag to separate them from surrounding Markdown content.</instruction>
+  </content>
+
+  <images>
+    <instruction>Convert image tags to use the Next.js Image component.</instruction>
+    <instruction>Never add import Image from 'next/image' to the MDX file, as it is handled already in the Next.js app</instruction>
+    <instruction>Update image paths to use the format: /static/images/insert-post-slug-here/filename.ext</instruction>
+    <example>
+<Image src="/static/images/insert-post-slug-here/filename.ext" alt="Example image" width={wx} height={hx} />
+    </example>
+    <instruction>Ensure the 'alt' text is descriptive and meaningful.</instruction>
+    <instruction>Always include width and height attributes for images, as these are required by the Next.js Image component.</instruction>
+  </images>
+
+  <gallery-images>
+    <instruction>Do this only for posts that are an image gallery. Do not do it for posts that have content between images, and are using the images to show things like relevant screenshots</instruction>
+    <instruction>If you can see that the post is very likely to be an image gallery, use the following format (make sure to include the frontmatter still at the beginning of the returned MDX):</instruction>
+    <example>
+      <![CDATA[
+<div className="flex flex-wrap -mx-2 overflow-hidden xl:-mx-2">
+  <div className="my-1 px-2 w-full overflow-hidden xl:my-1 xl:px-2 xl:w-1/2">
+    <Image alt="Maple" src="/static/images/insert-post-slug-here/filename.ext" width={wx} height={hx} />
+  </div>
+  <div className="my-1 px-2 w-full overflow-hidden xl:my-1 xl:px-2 xl:w-1/2">
+    <Image alt="Lake" src="/static/images/insert-post-slug-here/filename.ext" width={wx} height={hx} />
+  </div>
+  <div className="my-1 px-2 w-full overflow-hidden xl:my-1 xl:px-2 xl:w-1/2">
+    <Image alt="Mountains" src="/static/images/insert-post-slug-here/filename.ext" width={wx} height={hx} />
+  </div>
+  <div className="my-1 px-2 w-full overflow-hidden xl:my-1 xl:px-2 xl:w-1/2">
+    <Image alt="Toronto" src="/static/images/insert-post-slug-here/filename.ext" width={wx} height={hx} />
+  </div>
+</div>
+      ]]>
+    </example>
+    <instruction>Use appropriate alt text for each image based on its content.</instruction>
+    <instruction>Ensure image paths use the format: /static/images/insert-post-slug-here/filename.ext</instruction>
+    <instruction>Replace insert-post-slug-here with the actual post slug.</instruction>
+    <instruction>Replace filename.ext with the actual filename and extension of the image.</instruction>
+    <instruction>Ensure to replace wx with the actual width of the image.</instruction>
+    <instruction>Ensure to replace hx with the actual height of the image.</instruction>
+    <instruction>Maintain the Tailwind CSS classes for responsive layout.</instruction>
+  </gallery-images>
+
+  <html-in-mdx>
+    <instruction>When converting HTML to JSX for use in MDX, ensure all tags are properly closed and formatted.</instruction>
+    <instruction>Use JSX-style self-closing tags for elements such as br, img, hr.</instruction>
+    <instruction>Separate JSX blocks from Markdown content with empty lines to prevent parsing errors.</instruction>
+    <instruction>If complex JSX is necessary, wrap it in div tags and place it on its own lines, separated from other content.</instruction>
+  </html-in-mdx>
+
+  <code-blocks>
+    <instruction>Use triple backticks for code blocks and specify the language, based on the supported languages of refractor, which uses Prism, and are listed below.</instruction>
+    <instruction>Do not include any JSX or React components within code blocks unless they were present in the original content.</instruction>
+    <instruction>Use the following language identifiers for code blocks, which go at the opening (e.g. ```csharp) where applicable:</instruction>
+    <supported-languages>
+      <language>arduino (alias: ino)</language>
+      <language>bash (alias: sh, shell)</language>
+      <language>basic</language>
+      <language>c</language>
+      <language>clike</language>
+      <language>cpp</language>
+      <language>csharp (alias: cs, dotnet)</language>
+      <language>css</language>
+      <language>diff</language>
+      <language>go</language>
+      <language>ini</language>
+      <language>java</language>
+      <language>javascript (alias: js)</language>
+      <language>json (alias: webmanifest)</language>
+      <language>kotlin (alias: kt, kts)</language>
+      <language>less</language>
+      <language>lua</language>
+      <language>makefile</language>
+      <language>markdown (alias: md)</language>
+      <language>markup (alias: atom, html, mathml, rss, ssml, svg, xml)</language>
+      <language>markup-templating</language>
+      <language>objectivec (alias: objc)</language>
+      <language>perl</language>
+      <language>php</language>
+      <language>python (alias: py)</language>
+      <language>r</language>
+      <language>regex</language>
+      <language>ruby (alias: rb)</language>
+      <language>rust</language>
+      <language>sass</language>
+      <language>scss</language>
+      <language>sql</language>
+      <language>swift</language>
+      <language>typescript (alias: ts)</language>
+      <language>vbnet</language>
+      <language>yaml (alias: yml)</language>
+      <language>abap</language>
+      <language>abnf</language>
+      <language>actionscript</language>
+      <language>ada</language>
+      <language>agda</language>
+      <language>al</language>
+      <language>antlr4 (alias: g4)</language>
+      <language>apacheconf</language>
+      <language>apex</language>
+      <language>apl</language>
+      <language>applescript</language>
+      <language>aql</language>
+      <language>arff</language>
+      <language>armasm (alias: arm-asm)</language>
+      <language>arturo (alias: art)</language>
+      <language>asciidoc (alias: adoc)</language>
+      <language>asm6502</language>
+      <language>asmatmel</language>
+      <language>aspnet</language>
+      <language>autohotkey</language>
+      <language>autoit</language>
+      <language>avisynth (alias: avs)</language>
+      <language>avro-idl (alias: avdl)</language>
+      <language>awk (alias: gawk)</language>
+      <language>batch</language>
+      <language>bbcode (alias: shortcode)</language>
+      <language>bbj</language>
+      <language>bicep</language>
+      <language>birb</language>
+      <language>bison</language>
+      <language>bnf (alias: rbnf)</language>
+      <language>bqn</language>
+      <language>brainfuck</language>
+      <language>brightscript</language>
+      <language>bro</language>
+      <language>bsl (alias: oscript)</language>
+      <language>cfscript (alias: cfc)</language>
+      <language>chaiscript</language>
+      <language>cil</language>
+      <language>cilkc (alias: cilk-c)</language>
+      <language>cilkcpp (alias: cilk, cilk-cpp)</language>
+      <language>clojure</language>
+      <language>cmake</language>
+      <language>cobol</language>
+      <language>coffeescript (alias: coffee)</language>
+      <language>concurnas (alias: conc)</language>
+      <language>cooklang</language>
+      <language>coq</language>
+      <language>crystal</language>
+      <language>cshtml (alias: razor)</language>
+      <language>csp</language>
+      <language>css-extras</language>
+      <language>csv</language>
+      <language>cue</language>
+      <language>cypher</language>
+      <language>d</language>
+      <language>dart</language>
+      <language>dataweave</language>
+      <language>dax</language>
+      <language>dhall</language>
+      <language>django (alias: jinja2)</language>
+      <language>dns-zone-file (alias: dns-zone)</language>
+      <language>docker (alias: dockerfile)</language>
+      <language>dot (alias: gv)</language>
+      <language>ebnf</language>
+      <language>editorconfig</language>
+      <language>eiffel</language>
+      <language>ejs (alias: eta)</language>
+      <language>elixir</language>
+      <language>elm</language>
+      <language>erb</language>
+      <language>erlang</language>
+      <language>etlua</language>
+      <language>excel-formula (alias: xls, xlsx)</language>
+      <language>factor</language>
+      <language>false</language>
+      <language>firestore-security-rules</language>
+      <language>flow</language>
+      <language>fortran</language>
+      <language>fsharp</language>
+      <language>ftl</language>
+      <language>gap</language>
+      <language>gcode</language>
+      <language>gdscript</language>
+      <language>gedcom</language>
+      <language>gettext (alias: po)</language>
+      <language>gherkin</language>
+      <language>git</language>
+      <language>glsl</language>
+      <language>gml (alias: gamemakerlanguage)</language>
+      <language>gn (alias: gni)</language>
+      <language>go-module (alias: go-mod)</language>
+      <language>gradle</language>
+      <language>graphql</language>
+      <language>groovy</language>
+      <language>haml</language>
+      <language>handlebars (alias: hbs, mustache)</language>
+      <language>haskell (alias: hs)</language>
+      <language>haxe</language>
+      <language>hcl</language>
+      <language>hlsl</language>
+      <language>hoon</language>
+      <language>hpkp</language>
+      <language>hsts</language>
+      <language>http</language>
+      <language>ichigojam</language>
+      <language>icon</language>
+      <language>icu-message-format</language>
+      <language>idris (alias: idr)</language>
+      <language>iecst</language>
+      <language>ignore (alias: gitignore, hgignore, npmignore)</language>
+      <language>inform7</language>
+      <language>io</language>
+      <language>j</language>
+      <language>javadoc</language>
+      <language>javadoclike</language>
+      <language>javastacktrace</language>
+      <language>jexl</language>
+      <language>jolie</language>
+      <language>jq</language>
+      <language>js-extras</language>
+      <language>js-templates</language>
+      <language>jsdoc</language>
+      <language>json5</language>
+      <language>jsonp</language>
+      <language>jsstacktrace</language>
+      <language>jsx</language>
+      <language>julia</language>
+      <language>keepalived</language>
+      <language>keyman</language>
+      <language>kumir (alias: kum)</language>
+      <language>kusto</language>
+      <language>latex (alias: context, tex)</language>
+      <language>latte</language>
+      <language>lilypond (alias: ly)</language>
+      <language>linker-script (alias: ld)</language>
+      <language>liquid</language>
+      <language>lisp (alias: elisp, emacs, emacs-lisp)</language>
+      <language>livescript</language>
+      <language>llvm</language>
+      <language>log</language>
+      <language>lolcode</language>
+      <language>magma</language>
+      <language>mata</language>
+      <language>matlab</language>
+      <language>maxscript</language>
+      <language>mel</language>
+      <language>mermaid</language>
+      <language>metafont</language>
+      <language>mizar</language>
+      <language>mongodb</language>
+      <language>monkey</language>
+      <language>moonscript (alias: moon)</language>
+      <language>n1ql</language>
+      <language>n4js (alias: n4jsd)</language>
+      <language>nand2tetris-hdl</language>
+      <language>naniscript (alias: nani)</language>
+      <language>nasm</language>
+      <language>neon</language>
+      <language>nevod</language>
+      <language>nginx</language>
+      <language>nim</language>
+      <language>nix</language>
+      <language>nsis</language>
+      <language>ocaml</language>
+      <language>odin</language>
+      <language>opencl</language>
+      <language>openqasm (alias: qasm)</language>
+      <language>oz</language>
+      <language>parigp</language>
+      <language>parser</language>
+      <language>pascal (alias: objectpascal)</language>
+      <language>pascaligo</language>
+      <language>pcaxis (alias: px)</language>
+      <language>peoplecode (alias: pcode)</language>
+      <language>php-extras</language>
+      <language>phpdoc</language>
+      <language>plant-uml (alias: plantuml)</language>
+      <language>plsql</language>
+      <language>powerquery (alias: mscript, pq)</language>
+      <language>powershell</language>
+      <language>processing</language>
+      <language>prolog</language>
+      <language>promql</language>
+      <language>properties</language>
+      <language>protobuf</language>
+      <language>psl</language>
+      <language>pug</language>
+      <language>puppet</language>
+      <language>pure</language>
+      <language>purebasic (alias: pbfasm)</language>
+      <language>purescript (alias: purs)</language>
+      <language>q</language>
+      <language>qml</language>
+      <language>qore</language>
+      <language>qsharp (alias: qs)</language>
+      <language>racket (alias: rkt)</language>
+      <language>reason</language>
+      <language>rego</language>
+      <language>renpy (alias: rpy)</language>
+      <language>rescript (alias: res)</language>
+      <language>rest</language>
+      <language>rip</language>
+      <language>roboconf</language>
+      <language>robotframework (alias: robot)</language>
+      <language>sas</language>
+      <language>scala</language>
+      <language>scheme</language>
+      <language>shell-session (alias: sh-session, shellsession)</language>
+      <language>smali</language>
+      <language>smalltalk</language>
+      <language>smarty</language>
+      <language>sml (alias: smlnj)</language>
+      <language>solidity (alias: sol)</language>
+      <language>solution-file (alias: sln)</language>
+      <language>soy</language>
+      <language>sparql (alias: rq)</language>
+      <language>splunk-spl</language>
+      <language>sqf</language>
+      <language>squirrel</language>
+      <language>stan</language>
+      <language>stata</language>
+      <language>stylus</language>
+      <language>supercollider (alias: sclang)</language>
+      <language>systemd</language>
+      <language>t4-cs (alias: t4)</language>
+      <language>t4-templating</language>
+      <language>t4-vb</language>
+      <language>tap</language>
+      <language>tcl</language>
+      <language>textile</language>
+      <language>toml</language>
+      <language>tremor (alias: trickle, troy)</language>
+      <language>tsx</language>
+      <language>tt2</language>
+      <language>turtle (alias: trig)</language>
+      <language>twig</language>
+      <language>typoscript (alias: tsconfig)</language>
+      <language>unrealscript (alias: uc, uscript)</language>
+      <language>uorazor</language>
+      <language>uri (alias: url)</language>
+      <language>v</language>
+      <language>vala</language>
+      <language>velocity</language>
+      <language>verilog</language>
+      <language>vhdl</language>
+      <language>vim</language>
+      <language>visual-basic (alias: vb, vba)</language>
+      <language>warpscript</language>
+      <language>wasm</language>
+      <language>web-idl (alias: webidl)</language>
+      <language>wgsl</language>
+      <language>wiki</language>
+      <language>wolfram (alias: mathematica, nb, wl)</language>
+      <language>wren</language>
+      <language>xeora (alias: xeoracube)</language>
+      <language>xml-doc</language>
+      <language>xojo</language>
+      <language>xquery</language>
+      <language>yang</language>
+      <language>zig</language>
+    </supported-languages>
+  </code-blocks>
+</ai-instructions>
