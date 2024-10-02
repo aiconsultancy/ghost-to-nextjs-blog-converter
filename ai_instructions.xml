@@ -86,6 +86,8 @@ authors: ['default']
     <instruction>Avoid mixing HTML tags with Markdown syntax within the same paragraph. Start a new line for HTML elements.</instruction>
     <instruction>If HTML tags are used for formatting, consider using equivalent Markdown syntax when possible.</instruction>
     <instruction>For complex HTML structures, wrap them in a div tag to separate them from surrounding Markdown content.</instruction>
+    <instruction>When including code snippets, XML, or HTML-like content within Markdown, replace angle brackets (&lt; and &gt;) with their corresponding HTML entity codes (&amp;lt; and &amp;gt;) to prevent parsing issues. This is especially important for content within blockquotes or code blocks that isn't meant to be interpreted as JSX.</instruction>
+
   </content>
 
   <images>
