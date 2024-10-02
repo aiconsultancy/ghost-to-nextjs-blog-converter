@@ -5,10 +5,10 @@ This tool converts a Ghost blog export to a format compatible with Next.js blogs
 ## Features
 
 - Converts Ghost blog posts to MDX files
-- Downloads and processes images, saving them to ./public/static/images/<post-slug>/
+- Downloads and processes images, saving them to ./public/static/images/**post-slug**/
 - Generates frontmatter compatible with the [Tailwind Nextjs Starter Blog](https://github.com/timlrx/tailwind-nextjs-starter-blog)
 - Uses either Claude AI or ChatGPT for intelligent content processing and formatting
-- Handles code block language detection
+- Handles code block language detection using the [refractor supported syntaxes](https://github.com/wooorm/refractor#syntaxes)
 - Converts image tags to Next.js Image components
 - Automatically detects and includes image dimensions for Next.js Image components
 - Configurable AI Instructions in XML format, which you can tailor to your needs.
@@ -23,7 +23,7 @@ This tool converts a Ghost blog export to a format compatible with Next.js blogs
 
   - For Claude AI, it uses the Messages API. It sends the XML instructions as the first message, and then each post as a subsequent message in the same conversation.
   - For ChatGPT, it uses the Assistant API. It creates a new assistant with the XML instructions, and then processes each post in a separate thread.
-  - In my testing, I found that Claude performed better and was more reliable. ChatGPT didn't always follow the instructions and would not detect image gallaries nearly as reliably, inserting them where they shouldn't be. Feel free to tweak the ai_instructions.xml file to better fit your own blog's needs.
+  - In my testing, I found that Claude performed better and was more reliable. ChatGPT didn't always follow the instructions and would not detect image gallaries nearly as reliably, inserting them where they shouldn't be. Feel free to tweak the ai_instructions.xml file to better fit your blog's needs.
 
 ## Prerequisites
 
@@ -152,7 +152,7 @@ The converter will create MDX files in the output directory and save images in t
 - MDX files: `./data/blog/<post-slug>.mdx`
 - Images: `./public/static/images/<post-slug>/<filename>.<ext>`
 
-The frontmatter structure will be compatible with the Tailwind Nextjs Starter Blog, including fields such as title, date, tags, draft status, summary, and image references.
+The frontmatter structure will be compatible with the [Tailwind Nextjs Starter Blog](https://github.com/timlrx/tailwind-nextjs-starter-blog), including fields such as title, date, tags, draft status, summary, and image references.
 
 1. For a post without a featured image:
 
@@ -186,7 +186,7 @@ layout: "PostBanner"
 Note the following details:
 - The `images` field is always an array, even if there's only one image or no images.
 - If a post has a feature image (from Ghost), the `layout` will be set to 'PostBanner' and the feature image will be the first in the `images` array.
-- The Tailwind Nextjs Starter Blog uses the first image in the `images` array as the banner image when the layout is set to 'PostBanner'.
+- The [Tailwind Nextjs Starter Blog](https://github.com/timlrx/tailwind-nextjs-starter-blog) uses the first image in the `images` array as the banner image when the layout is set to 'PostBanner'.
 - If a post doesn't have a feature image, the `layout` will be set to 'PostLayout'.
 - All string values in the frontmatter are quoted to ensure compatibility with YAML parsing.
 
